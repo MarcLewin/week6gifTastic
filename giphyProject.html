@@ -1,124 +1,98 @@
 <!DOCTYPE <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Giph Master</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Giph Master</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
 </head>
 <style>
-form{
-    position:fixed;
+  form {
+    position: fixed;
     left: 800px;
-}
-
+  }
 </style>
+
 <body>
-    <div id ="buttons">
+  <div id="buttons">
 
-    </div>
-    <form>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Add a cartoon</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
-              <small id="emailHelp" class="form-text text-muted"></small>
-            </div>
-            
-            
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-
-        <div id= "ratingHere">
-
-        </div>
-    <div id="giphyOverHere">
-
+  </div>
+  <form>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Add some Giphs</label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">
+      <small id="emailHelp" class="form-text text-muted"></small>
     </div>
 
 
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 
-    
+  <div id="ratingHere">
 
-    <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+  </div>
+  <div id="giphyOverHere">
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
   <script type="text/javascript">
-  
-  var topics = ["cartoons", "dragon ball z", "bugs bunny", "rugrats", "doug funny", "pinky and the brain", "ren and stimpy cartoon"]
-  
-  for ( i = 0; i < topics.length; i++){
 
-var cartoons = $('<button>');
-// b.addClass('letter-button letter letter-button-color');
-cartoons.attr('dat-let', topics[i]);
-cartoons.text(topics[i]);
-$('#buttons').append(cartoons);
-}
-  $("button").on("click", function() {
-    //   string(cartoons);
+    var topics = ["cartoons", "dragon ball z", "bugs bunny", "rugrats", "doug funny", "pinky and the brain", "ren and stimpy cartoon"]
+
+    for (i = 0; i < topics.length; i++) {
+
+      var cartoons = $('<button>');
+      // b.addClass('letter-button letter letter-button-color');
+      cartoons.attr('data-name', topics[i]);
+      // $('#buttons').val().trim();
+     cartoons.text(topics[i]);
+      $('#buttons').append(cartoons);
+    }
+    $("button").on("click", function () {
+      var cartoons = $(this).attr("data-let", topics[i]);
+      //   string(cartoons);
       console.log(typeof cartoons)
       console.log(cartoons)
-    
 
-      var queryURL =  "https://api.giphy.com/v1/gifs/search?q=" + cartoons + "&api_key=dc6zaTOxFJmzC&limit=10";
-
-
-// "https://api.giphy.com/v1/gifs/search?api_key=zhhvJRLWEFILf9oEmVnDCEYbP5hzUkOb&q=" 
-//       + cartoons + "&limit=10&offset=0&rating=G&lang=en";
+var cartoonSearch = $(this).attr('data-name');
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + cartoonSearch + "&api_key=dc6zaTOxFJmzC&limit=10";
 
 
-
+      // "https://api.giphy.com/v1/gifs/search?api_key=zhhvJRLWEFILf9oEmVnDCEYbP5hzUkOb&q=" 
+      //       + cartoons + "&limit=10&offset=0&rating=G&lang=en";
 
       $.ajax({
         url: queryURL,
         method: "GET"
-      }).then(function(response) {
-        // Step 1: Run this file, click a button, and see what the response object looks like in the browser's console.
-        // Open up the data key, then open up the 0th, element. Study the keys and how the JSON is structured.
-
+      }).then(function (response) {
         console.log(response);
 
-        // Step 2: since the image information is inside of the data key,
-        // make a variable named results and set it equal to response.data
-    var results= response.data
-        // =============== put step 2 in between these dashes ==================
+        var results = response.data
 
-        // ========================
-
-   var results= response.data
-        // =============== put step 2 in between these dashes ==================
-
-        // ========================
-
-         for (var i = 0; i < results.length; i++) {
-
-        // Step 3: uncomment the for loop above and the closing curly bracket below.
-        // Make a div with jQuery and store it in a variable named animalDiv.
-       var animalDiv = $("<div>");
-        // Make a paragraph tag with jQuery and store it in a variable named p.
-        var p = $('<p>');
-        // Set the inner text of the paragraph to the rating of the image in results[i].
-        $(p).text("Rating: "+ response.data[i].rating);
-        // Make an image tag with jQuery and store it in a variable named animalImage.
-        var animalImage = $('<img>');
-        // Set the image's src to results[i]'s fixed_height.url.
-            animalImage.attr('src', response.data[i].images.fixed_height.url)
-        // Append the p variable to the animalDiv variable.
-        animalDiv.append(p);
-        // Append the animalImage variable to the animalDiv variable.
-        animalDiv.append(animalImage);
-        // Prepend the animalDiv variable to the element with an id of gifs-appear-here.
-$('#giphyOverHere').prepend(animalDiv);
-         }
+        for (var i = 0; i < results.length; i++) {
+          var cartoonDiv = $("<div>");
+          var p = $('<p>');
+          $(p).text("Rating: " + response.data[i].rating);
+          var cartoonImage = $('<img>');
+          // cartoonImage.attr('src', response.data[i].images.fixed_height_still.url)
+          cartoonImage.attr('src', response.data[i].images.fixed_height.url)
+          cartoonDiv.append(p);
+          cartoonDiv.append(cartoonImage);
+          $('#giphyOverHere').prepend(cartoonDiv);
+        }
 
       });
     });
-  
-  
-  
+
+
+
   </script>
 </body>
+
 </html>
