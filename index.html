@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Giph Master</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+</head>
+<style>
+  form {
+    position: fixed;
+    left: 800px;
+  }
+</style>
+
+<body>
+  <div id="buttons">
+
+  </div>
+  <div id ="addedButtons">
+
+  </div>
+  <form>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Add some Giphs</label>
+      <input type="text" class="form-control" id="add-giph-input" aria-describedby="emailHelp" placeholder="">
+      <small id="emailHelp" class="form-text text-muted"></small>
+    </div>
+
+    
+    <button type="button" class="btn btn-primary" id="addGiphs">Submit</button>
+  </form>
+
+  <div id="ratingHere">
+
+  </div>
+  <div id="giphyOverHere">
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script type="text/javascript">
+
+
+
+    var topics = ["cartoons", "dragon ball z", "bugs bunny", "rugrats", "doug", "pinky and the brain", "ren and stimpy cartoon", "ninja turtles"]
+
+    function buttonsToPage() {
+
+
+      for (i = 0; i < topics.length; i++) {
+
+        var cartoons = $('<button>');
+        cartoons.addClass('btn btn-primary');
+        cartoons.attr('data-name', topics[i]); //data-name works as a getter, topics[i] is the setter
+        cartoons.text(topics[i]);
+        $('#buttons').append(cartoons);
+      }
+    }
+    buttonsToPage();
+
+
+
+    $("button").on("click", function () {
+      var cartoonSearch = $(this).attr('data-name');
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + cartoonSearch + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).then(function (response) {
+
+
+        var results = response.data
+
+        for (var i = 0; i < results.length; i++) {
+          var cartoonDiv = $("<div>");
+          var p = $('<p>');
+          $(p).text("Rating: " + response.data[i].rating);
+          var cartoonGiph = $('<img>');
+
+          cartoonGiph.attr('data-still', results[i].images.fixed_height_still.url);
+          cartoonGiph.attr('src', response.data[i].images.fixed_height_still.url)
+          cartoonGiph.attr('data-animate', results[i].images.fixed_height.url);
+          cartoonGiph.attr('data-state', 'still');
+          cartoonGiph.addClass('cartoonImage');
+          cartoonDiv.append(cartoonGiph);
+          cartoonDiv.append(p);
+          $('#giphyOverHere').prepend(cartoonDiv);
+        }
+        $('.cartoonImage').on('click', function () {
+
+          var state = $(this).attr('data-state');
+
+          if (state === 'still') {
+            $(this).attr('src', $(this).data('animate'));
+            $(this).attr('data-state', 'animate');
+          } else {
+            $(this).attr('src', $(this).data('still'));
+            $(this).attr('data-state', 'still');
+          }
+
+        });
+
+      });
+
+    });
+
+    $('#addGiphs').on('click', function (event) {
+      event.preventDefault();
+
+      var SearchCartoon = $('#add-giph-input').val().trim();
+      var SearchCartoon = $(this).attr('data-name');
+      SearchCartoon.addClass('button');
+      console.log(SearchCartoon);
+      topics.push(SearchCartoon);
+      console.log(topics)
+      $('#addedButtons').append(SearchCartoon);
+      return false;
+    })
+
+  </script>
+</body>
+
+</html>
