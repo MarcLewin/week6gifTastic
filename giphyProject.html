@@ -1,4 +1,4 @@
-<!DOCTYPE <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -21,14 +21,17 @@
   <div id="buttons">
 
   </div>
+  <div id ="addedButtons">
+
+  </div>
   <form>
     <div class="form-group">
       <label for="exampleInputEmail1">Add some Giphs</label>
-      <input type="email" class="form-control" id="add-giph-input" aria-describedby="emailHelp" placeholder="">
+      <input type="text" class="form-control" id="add-giph-input" aria-describedby="emailHelp" placeholder="">
       <small id="emailHelp" class="form-text text-muted"></small>
     </div>
 
-
+    
     <button type="button" class="btn btn-primary" id="addGiphs">Submit</button>
   </form>
 
@@ -43,6 +46,8 @@
     crossorigin="anonymous"></script>
   <script type="text/javascript">
 
+
+
     var topics = ["cartoons", "dragon ball z", "bugs bunny", "rugrats", "doug", "pinky and the brain", "ren and stimpy cartoon", "ninja turtles"]
 
     function buttonsToPage() {
@@ -51,9 +56,8 @@
       for (i = 0; i < topics.length; i++) {
 
         var cartoons = $('<button>');
-        // b.addClass('letter-button letter letter-button-color');
+        cartoons.addClass('btn btn-primary');
         cartoons.attr('data-name', topics[i]); //data-name works as a getter, topics[i] is the setter
-        // $('#buttons').val().trim();
         cartoons.text(topics[i]);
         $('#buttons').append(cartoons);
       }
@@ -63,23 +67,14 @@
 
 
     $("button").on("click", function () {
-      // var cartoons = $(this).attr("data-let", topics[i]);
-      //   string(cartoons);
-      // console.log(typeof cartoons)
-      // console.log(cartoons)
-
       var cartoonSearch = $(this).attr('data-name');
       var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + cartoonSearch + "&api_key=dc6zaTOxFJmzC&limit=10";
-
-
-      // "https://api.giphy.com/v1/gifs/search?api_key=zhhvJRLWEFILf9oEmVnDCEYbP5hzUkOb&q=" 
-      //       + cartoons + "&limit=10&offset=0&rating=G&lang=en";
 
       $.ajax({
         url: queryURL,
         method: "GET"
       }).then(function (response) {
-        console.log(response);
+
 
         var results = response.data
 
@@ -88,7 +83,7 @@
           var p = $('<p>');
           $(p).text("Rating: " + response.data[i].rating);
           var cartoonGiph = $('<img>');
-         
+
           cartoonGiph.attr('data-still', results[i].images.fixed_height_still.url);
           cartoonGiph.attr('src', response.data[i].images.fixed_height_still.url)
           cartoonGiph.attr('data-animate', results[i].images.fixed_height.url);
@@ -98,43 +93,34 @@
           cartoonDiv.append(p);
           $('#giphyOverHere').prepend(cartoonDiv);
         }
-        $('.cartoonImage').on('click', function(){
-       
-          var state = $(this).attr('data-state'); 
-       
-       
-            if ( state === 'still'){
-                $(this).attr('src', $(this).data('animate'));
-                $(this).attr('data-state', 'animate');
-            }else{
-                $(this).attr('src', $(this).data('still'));
-                $(this).attr('data-state', 'still');
-            }
+        $('.cartoonImage').on('click', function () {
+
+          var state = $(this).attr('data-state');
+
+          if (state === 'still') {
+            $(this).attr('src', $(this).data('animate'));
+            $(this).attr('data-state', 'animate');
+          } else {
+            $(this).attr('src', $(this).data('still'));
+            $(this).attr('data-state', 'still');
+          }
+
+        });
 
       });
-
-      });
-
-
 
     });
 
     $('#addGiphs').on('click', function (event) {
       event.preventDefault();
-      //clear container
-      //$('#cartoonsView').html("");     
 
-      // This line of code will grab the input from the textbox
-      var cartoonSearch = $('#add-giph-input').val().trim();
-
-      // The cartoon from the textbox is then added to our array
-      topics.push(cartoonSearch);
-      buttonsToPage();
-
-      // Our array then runs which handles the processing of our cartoon array
-      // buttonsToPage();
-
-      // We have this line so that users can hit "enter" instead of clicking on ht button and it won't move to the next page
+      var SearchCartoon = $('#add-giph-input').val().trim();
+      var SearchCartoon = $(this).attr('data-name');
+      SearchCartoon.addClass('button');
+      console.log(SearchCartoon);
+      topics.push(SearchCartoon);
+      console.log(topics)
+      $('#addedButtons').append(SearchCartoon);
       return false;
     })
 
